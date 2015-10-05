@@ -1,16 +1,31 @@
 # By default Volt generates this controller for your Main component
 module Main
   class MainController < Volt::ModelController
-    def index
-      # Add code for when the index view is loaded
+    model :store
+
+    def add_todo
+      _todos << page._new_todo.to_h
+      page._new_todo._label = ''
     end
 
-    def about
-      # Add code for when the about view is loaded
+    def incomplete
+      _todos.count {|t| !t._completed}
     end
 
-    def bookmarks
+    def complete_all
+      _todos.each {|t| t._completed = true }
+    end
 
+    def clear_completed_todos
+      _todos.select {|t| t._completed }.each(&:destroy)
+    end
+
+    def current_index
+      params._index.to_i
+    end
+
+    def current_todo
+      _todos[current_index]
     end
 
     private

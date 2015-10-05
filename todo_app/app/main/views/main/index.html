@@ -1,6 +1,30 @@
 <:Title>
-  Home
+  Todos
 
 <:Body>
-  <h1>Home</h1>
+  <h1> {{ _todos.size}} Todos </h1>
+  <button e-click='complete_all'> Complete {{ incomplete }} Tasks </button>
+  <button e-click='clear_completed_todos'> Clear </button>
 
+  <table class="table">
+  {{ _todos.each_with_index do |todo, index| }}
+    <tr
+        e-click="params._index = index"
+        class= "{{ if current_index == index }}selected{{ end }}" 
+    >
+        <td> <input type="checkbox" checked="{{ todo._completed }}"></td>
+        <td class="{{ if todo._completed }}complete{{ end }}"> {{ todo._label }}</td>
+        <td> <button e-click="todo.destroy">X</button> </td>
+    </tr>
+  {{ end }}
+  </table>
+
+  <form e-submit="add_todo" role='form'> 
+    <input value="{{ page._new_todo!._label }}"/> 
+  </form> 
+
+  <br/>
+  {{ if current_todo }}
+    <h1> {{ current_todo._label }}</h1>
+    <textarea> {{ current_todo._description }} </textarea>
+  {{ end }}
